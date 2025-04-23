@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'SourGummy';
+  src: url('/fonts/SourGummy-Regular.woff2') format('woff2'),
+       url('/fonts/SourGummy-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.SourGummy-Thin {
+  font-family: 'SourGummy', sans-serif;
+  font-weight: 300;
+} 
