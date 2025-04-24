@@ -55,9 +55,6 @@ export default function LandingPage() {
             <Link href="#how-it-works" className="text-sm font-medium text-[#4B5563] hover:text-[#004B8D]">
               How It Works
             </Link>
-            <Link href="#why-choose-us" className="text-sm font-medium text-[#4B5563] hover:text-[#004B8D]">
-              Why Choose Us
-            </Link>
           </nav>
           
           {/* Desktop Auth Buttons */}
@@ -100,13 +97,6 @@ export default function LandingPage() {
               >
                 How It Works
               </Link>
-              <Link 
-                href="#why-choose-us" 
-                className="text-sm font-medium text-[#4B5563] hover:text-[#004B8D]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Why Choose Us
-              </Link>
             </nav>
             <div className="flex flex-col gap-4 pt-4 border-t border-[#E5E7EB]">
               <Button 
@@ -146,8 +136,15 @@ export default function LandingPage() {
                   transparent, and effective.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" asChild className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white">
-                    <Link href="/register">Get Started</Link>
+                  <Button 
+                    size="lg" 
+                    className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
+                    onClick={() => {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      setTimeout(() => setIsLoginModalHidden(false), 500);
+                    }}
+                  >
+                    Get Started
                   </Button>
                   <Button size="lg" variant="outline" asChild className="border-[#004B8D] text-[#004B8D] hover:bg-[#004B8D] hover:text-white">
                     <Link href="#features">Learn More</Link>
@@ -175,42 +172,34 @@ export default function LandingPage() {
                   className="h-full"
                 >
                   <SwiperSlide>
-                    <div className="relative h-full">
+                    <div className="relative h-full bg-white">
                       <Image
-                        src="/placeholder.svg?height=400&width=600"
-                        alt="Urban planning dashboard"
+                        src="/images/Carosel1.jpg"
+                        alt="Data Analytics Dashboard"
                         fill
                         className="object-cover"
+                        priority
                       />
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <h3 className="text-white text-xl font-bold">Smart City Dashboard</h3>
-                      </div>
                     </div>
                   </SwiperSlide>
                   <SwiperSlide>
                     <div className="relative h-full">
                       <Image
-                        src="/placeholder.svg?height=400&width=600"
-                        alt="Project Management"
+                        src="/images/Carosel.jpg"
+                        alt="Smart City Dashboard"
                         fill
                         className="object-cover"
                       />
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <h3 className="text-white text-xl font-bold">Project Management</h3>
-                      </div>
                     </div>
                   </SwiperSlide>
                   <SwiperSlide>
                     <div className="relative h-full">
                       <Image
-                        src="/placeholder.svg?height=400&width=600"
-                        alt="Data Analytics"
+                        src="/images/Carosel3.jpg"
+                        alt="Data Analytics Dashboard"
                         fill
                         className="object-cover"
                       />
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <h3 className="text-white text-xl font-bold">Data Analytics</h3>
-                      </div>
                     </div>
                   </SwiperSlide>
                   <div className="swiper-button-next !text-white after:!text-2xl"></div>
@@ -276,13 +265,20 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl order-2 md:order-1">
-                <Image
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="UrbanLink map interface"
-                  fill
-                  className="object-cover"
-                />
+              <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl order-2 md:order-1 bg-[#FFF5EB]">
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/images/govt.jpg"
+                    alt="Government Official"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    style={{
+                      objectFit: 'contain',
+                      padding: '1rem'
+                    }}
+                    priority
+                  />
+                </div>
               </div>
               <div className="space-y-8 order-1 md:order-2">
                 <div className="flex gap-4">
@@ -334,52 +330,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Why Choose Us Section */}
-        <section id="why-choose-us" className="py-16 md:py-24">
-          <div className="container">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">Why Choose UrbanLink</h2>
-              <p className="text-lg text-[#4B5563] max-w-[800px] mx-auto">
-                Our platform is designed specifically for the unique challenges of urban governance
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <StatCard
-                icon={<BarChart3 className="h-8 w-8 text-[#FFA500]" />}
-                value="40%"
-                label="Increase in Efficiency"
-              />
-              <StatCard icon={<Map className="h-8 w-8 text-[#FFA500]" />} value="60+" label="Cities Using UrbanLink" />
-              <StatCard
-                icon={<Calendar className="h-8 w-8 text-[#FFA500]" />}
-                value="30%"
-                label="Faster Project Completion"
-              />
-              <StatCard icon={<Users className="h-8 w-8 text-[#FFA500]" />} value="10k+" label="Municipal Employees" />
-            </div>
-            <div className="mt-16 grid md:grid-cols-3 gap-8">
-              <TestimonialCard
-                quote="UrbanLink has transformed how our departments collaborate on infrastructure projects."
-                author="Sarah Johnson"
-                role="Urban Planning Director"
-                city="Metro City"
-              />
-              <TestimonialCard
-                quote="The map visualization feature alone has saved us countless hours of coordination meetings."
-                author="Michael Chen"
-                role="Public Works Manager"
-                city="Riverside"
-              />
-              <TestimonialCard
-                quote="We've reduced project delays by 35% since implementing UrbanLink across all departments."
-                author="David Rodriguez"
-                role="City Manager"
-                city="New Harbor"
-              />
-            </div>
-          </div>
-        </section>
-
         {/* CTA Section */}
         <section className="py-16 md:py-24 bg-[#004B8D] text-white">
           <div className="container">
@@ -388,17 +338,16 @@ export default function LandingPage() {
               <p className="text-xl opacity-90">
                 Join the growing network of cities using UrbanLink to transform interdepartmental collaboration.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" asChild className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white">
-                  <Link href="/register">Get Started</Link>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="bg-transparent text-white border-white hover:bg-white hover:text-[#004B8D]"
-                  asChild
+              <div className="flex justify-center">
+                <Button 
+                  size="lg" 
+                  className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setTimeout(() => setIsLoginModalHidden(false), 500);
+                  }}
                 >
-                  <Link href="/contact">Request Demo</Link>
+                  Get Started
                 </Button>
               </div>
             </div>
@@ -520,30 +469,6 @@ function FeatureCard({ icon, title, description }) {
       <div className="mb-4">{icon}</div>
       <h3 className="text-xl font-bold mb-2 text-[#1A1A1A]">{title}</h3>
       <p className="text-[#4B5563]">{description}</p>
-    </div>
-  )
-}
-
-function StatCard({ icon, value, label }) {
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-md text-center">
-      <div className="flex justify-center mb-4">{icon}</div>
-      <div className="text-3xl font-bold mb-1 text-[#1A1A1A]">{value}</div>
-      <p className="text-[#4B5563]">{label}</p>
-    </div>
-  )
-}
-
-function TestimonialCard({ quote, author, role, city }) {
-  return (
-    <div className="bg-white p-6 rounded-lg shadow-md border border-[#E5E7EB]">
-      <p className="italic mb-4 text-[#4B5563]">"{quote}"</p>
-      <div>
-        <p className="font-bold text-[#1A1A1A]">{author}</p>
-        <p className="text-sm text-[#4B5563]">
-          {role}, {city}
-        </p>
-      </div>
     </div>
   )
 }
