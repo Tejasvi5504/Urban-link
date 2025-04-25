@@ -26,6 +26,9 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import SummaryCard from './SummaryCard'
+import TaskList from './TaskList'
+import RecentActivities from './RecentActivities'
 
 export default function LandingPage() {
   const [isLoginModalHidden, setIsLoginModalHidden] = useState(true)
