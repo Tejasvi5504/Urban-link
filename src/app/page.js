@@ -62,10 +62,10 @@ export default function LandingPage() {
           
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <Button asChild variant="outline" className="border-[#004B8D] text-[#004B8D] hover:bg-[#004B8D] hover:text-white" onClick={() => setIsLoginModalHidden(false)}>
+            <Button asChild variant="outline" className="border-[#4B8DCC] text-[#4B8DCC] bg-[#E6F0F9] hover:bg-[#4B8DCC] hover:text-white" onClick={() => setIsLoginModalHidden(false)}>
               <Link href="#">Login</Link>
             </Button>
-            <Button asChild className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white">
+            <Button asChild className="bg-[#FFB74D] hover:bg-[#FFB74D]/90 text-white">
               <Link href="/register">Register</Link>
             </Button>
           </div>
@@ -105,7 +105,7 @@ export default function LandingPage() {
               <Button 
                 asChild 
                 variant="outline" 
-                className="w-full border-[#004B8D] text-[#004B8D] hover:bg-[#004B8D] hover:text-white"
+                className="w-full border-[#4B8DCC] text-[#4B8DCC] bg-[#E6F0F9] hover:bg-[#4B8DCC] hover:text-white"
                 onClick={() => {
                   setIsLoginModalHidden(false);
                   setMobileMenuOpen(false);
@@ -115,7 +115,7 @@ export default function LandingPage() {
               </Button>
               <Button 
                 asChild 
-                className="w-full bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
+                className="w-full bg-[#FFB74D] hover:bg-[#FFB74D]/90 text-white"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Link href="/register">Register</Link>
@@ -141,7 +141,7 @@ export default function LandingPage() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
                     size="lg" 
-                    className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
+                    className="bg-[#FFB74D] hover:bg-[#FFB74D]/90 text-white"
                     onClick={() => {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                       setTimeout(() => setIsLoginModalHidden(false), 500);
@@ -149,7 +149,7 @@ export default function LandingPage() {
                   >
                     Get Started
                   </Button>
-                  <Button size="lg" variant="outline" asChild className="border-[#004B8D] text-[#004B8D] hover:bg-[#004B8D] hover:text-white">
+                  <Button size="lg" variant="outline" asChild className="border-[#4B8DCC] text-[#4B8DCC] bg-[#E6F0F9] hover:bg-[#4B8DCC] hover:text-white">
                     <Link href="#features">Learn More</Link>
                   </Button>
                 </div>
@@ -344,7 +344,7 @@ export default function LandingPage() {
               <div className="flex justify-center">
                 <Button 
                   size="lg" 
-                  className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
+                  className="bg-[#FFB74D] hover:bg-[#FFB74D]/90 text-white"
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     setTimeout(() => setIsLoginModalHidden(false), 500);
