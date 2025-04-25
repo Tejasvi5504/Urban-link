@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Mail, Lock, Building2, Eye, EyeOff, X } from "lucide-react"
 
-export function LoginModal({ isHidden, setIsHidden }) {
+export default function LoginModal({ isHidden, setIsHidden }) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)

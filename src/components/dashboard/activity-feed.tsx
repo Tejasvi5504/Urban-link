@@ -9,7 +9,7 @@ export function ActivityFeed() {
       type: "message",
       user: {
         name: "Rajesh Kumar",
-        avatar: "/placeholder.svg?height=32&width=32",
+        avatar: "/images/avatar-placeholder.png",
         department: "Water Resources",
       },
       content: "Left a comment on Metro Line Extension project",
@@ -20,7 +20,7 @@ export function ActivityFeed() {
       type: "file",
       user: {
         name: "Priya Singh",
-        avatar: "/placeholder.svg?height=32&width=32",
+        avatar: "/images/avatar-placeholder.png",
         department: "Urban Planning",
       },
       content: "Uploaded revised plans for Smart Traffic System",
@@ -31,7 +31,7 @@ export function ActivityFeed() {
       type: "update",
       user: {
         name: "Vikram Mehta",
-        avatar: "/placeholder.svg?height=32&width=32",
+        avatar: "/images/avatar-placeholder.png",
         department: "Smart City Cell",
       },
       content: "Updated status of Solar Park Installation to Completed",
@@ -42,7 +42,7 @@ export function ActivityFeed() {
       type: "message",
       user: {
         name: "Anita Desai",
-        avatar: "/placeholder.svg?height=32&width=32",
+        avatar: "/images/avatar-placeholder.png",
         department: "Finance",
       },
       content: "Approved budget for Water Treatment Plant",
@@ -53,7 +53,7 @@ export function ActivityFeed() {
       type: "file",
       user: {
         name: "Sanjay Patel",
-        avatar: "/placeholder.svg?height=32&width=32",
+        avatar: "/images/avatar-placeholder.png",
         department: "Parks & Recreation",
       },
       content: "Shared Public Park Renovation timeline document",
@@ -84,7 +84,7 @@ export function ActivityFeed() {
           {activities.map((activity) => (
             <div key={activity.id} className="flex items-start gap-4">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={activity.user.avatar || "/placeholder.svg"} alt={activity.user.name} />
+                <AvatarImage src={activity.user.avatar || "/images/avatar-placeholder.png"} alt={activity.user.name} />
                 <AvatarFallback>{activity.user.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="space-y-1">
