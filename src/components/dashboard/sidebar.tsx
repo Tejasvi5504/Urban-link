@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { BarChart3, Calendar, FileText, Home, Layers, LogOut, MessageSquare, Settings, Users } from "lucide-react"
 import {
   Sidebar,
@@ -17,6 +17,7 @@ import React from "react"
 
 export function DashboardSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
 
   const menuItems = [
     {
@@ -55,6 +56,12 @@ export function DashboardSidebar() {
       icon: Users,
     },
   ]
+
+  const handleLogout = () => {
+    // Clear any session data if needed
+    // Redirect to landing page
+    router.push("/")
+  }
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -111,7 +118,7 @@ export function DashboardSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Logout">
-              <button className="w-full">
+              <button className="w-full" onClick={handleLogout}>
                 <LogOut className="h-5 w-5" />
                 <span>Logout</span>
               </button>

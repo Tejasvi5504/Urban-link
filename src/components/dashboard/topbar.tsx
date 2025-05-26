@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Bell, ChevronDown, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +17,14 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export function Topbar() {
+  const router = useRouter()
+
+  const handleLogout = () => {
+    // Clear any session data if needed
+    // Redirect to landing page
+    router.push("/")
+  }
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center border-b bg-background px-4 md:px-6">
       <div className="flex items-center gap-2 md:gap-4">
@@ -75,7 +84,7 @@ export function Topbar() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Help & Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
