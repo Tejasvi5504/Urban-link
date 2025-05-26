@@ -47,7 +47,7 @@ export default function LandingPage() {
               className="h-28 w-28"
               priority
             />
-            <span className="text-4xl font-bold text-[#1A1A1A]">UrbanLink</span>
+            <span className="text-4xl font-extrabold bg-gradient-to-r from-[#004B8D] to-[#FFB74D] bg-clip-text text-transparent hover:from-[#FFB74D] hover:to-[#004B8D] transition-all duration-300 font-jakarta tracking-tight uppercase italic drop-shadow-sm">UrbanLink </span>
           </div>
           
           {/* Desktop Navigation */}
@@ -154,7 +154,7 @@ export default function LandingPage() {
                   </Button>
                 </div>
               </div>
-              <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-xl">
+              <div className="relative h-[500px] md:h-[450px] rounded-lg overflow-hidden shadow-xl">
                 <Swiper
                   modules={[Autoplay, Navigation, Pagination]}
                   spaceBetween={0}
@@ -177,7 +177,7 @@ export default function LandingPage() {
                   <SwiperSlide>
                     <div className="relative h-full bg-white">
                       <Image
-                        src="/images/Carosel1.jpg"
+                        src="/images/photo-1562630426-5942d5363820.avif"
                         alt="Data Analytics Dashboard"
                         fill
                         className="object-cover"
@@ -188,7 +188,7 @@ export default function LandingPage() {
                   <SwiperSlide>
                     <div className="relative h-full">
                       <Image
-                        src="/images/Carosel.jpg"
+                        src="/images/photo-1495725274072-fd5d0b961a9f.avif"
                         alt="Smart City Dashboard"
                         fill
                         className="object-cover"
@@ -198,7 +198,7 @@ export default function LandingPage() {
                   <SwiperSlide>
                     <div className="relative h-full">
                       <Image
-                        src="/images/Carosel3.jpg"
+                        src="/images/photo-1541888946425-d81bb19240f5.avif"
                         alt="Data Analytics Dashboard"
                         fill
                         className="object-cover"
