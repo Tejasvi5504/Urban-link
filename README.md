@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Urban Link
+
+Urban Link is a modern web application designed for efficient management and tracking of city projects and services. It features role-based access for officers and civilians, a clean dashboard, and a responsive user interface.
+
+## Features
+
+- **Role-Based Authentication:**  
+  Separate login/register flows for officers (with department selection and email) and civilians (with user ID).
+- **Project Dashboard:**  
+  View ongoing, pending, completed, and all projects with status tabs.
+- **Department Management:**  
+  Officers can log in by selecting their department from a dropdown.
+- **Responsive UI:**  
+  Built with React, Next.js, and Tailwind CSS for a seamless experience on all devices.
+- **Custom Branding:**  
+  Uses the Urban Link logo and a consistent color scheme across all pages.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js (v18 or above recommended)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/urban-link.git
+   cd urban-link
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Add your logo:**
+   Place your logo image in the `public` folder as `logo.png` (or update the path in `LoginModal.jsx`).
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. **Open in your browser:**
+   ```
+   http://localhost:3000
+   ```
+
+## Project Structure
+
+```
+src/
+  app/
+    projects/
+      page.tsx         # Project dashboard page
+  components/
+    LoginModal.jsx     # Login/Register modal for officers and civilians
+public/
+  logo.png             # Project logo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Customization
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- **Departments:**  
+  Edit the `departments` array in `LoginModal.jsx` to add or remove city departments.
+- **Color Scheme:**  
+  Update Tailwind CSS classes in components to match your branding.
+- **Authentication:**  
+  Integrate with your backend or Clerk for real authentication and user management.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contributing
 
-## Learn More
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[MIT](LICENSE)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Developed by [Your Name/Team]**
