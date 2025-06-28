@@ -65,9 +65,7 @@ export default function LandingPage() {
             <Button asChild variant="outline" className="border-[#4B8DCC] text-[#4B8DCC] bg-[#E6F0F9] hover:bg-[#4B8DCC] hover:text-white" onClick={() => setIsLoginModalHidden(false)}>
               <Link href="#">Login</Link>
             </Button>
-            <Button asChild className="bg-[#FFB74D] hover:bg-[#FFB74D]/90 text-white">
-              <Link href="/register">Register</Link>
-            </Button>
+           
           </div>
 
           {/* Mobile Menu Button */}

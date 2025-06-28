@@ -2,10 +2,27 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Mail, Lock, Building2, Eye, EyeOff, X } from "lucide-react"
+import { Mail, Lock, Building2, Eye, EyeOff, X, Briefcase, User } from "lucide-react"
+
+const departments = [
+  "Water Supply",
+  "Sanitation",
+  "Public Works",
+  "Electricity",
+  "Transport",
+  "Health",
+  "Education",
+  "Fire Department",
+  "Police",
+  "Parks & Recreation"
+]
 
 export default function LoginModal({ isHidden, setIsHidden }) {
-  const [username, setUsername] = useState("")
+  const [isLogin, setIsLogin] = useState(true)
+  const [userType, setUserType] = useState("officer") // "officer" or "civilian"
+  const [department, setDepartment] = useState("")
+  const [email, setEmail] = useState("")
+  const [userId, setUserId] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
@@ -15,8 +32,9 @@ export default function LoginModal({ isHidden, setIsHidden }) {
 
   const handleClose = () => {
     setIsHidden(true)
-    // Reset form state when closing
-    setUsername("")
+    setDepartment("")
+    setEmail("")
+    setUserId("")
     setPassword("")
     setError("")
   }
@@ -25,20 +43,53 @@ export default function LoginModal({ isHidden, setIsHidden }) {
     e.preventDefault()
     setIsLoading(true)
     setError("")
-
     try {
-      // Check credentials immediately
-      if (username === "officer" && password === "urban123") {
-        // Hide modal and redirect in sequence
-        setIsHidden(true)
-        // Use push to maintain navigation history
-        router.push("/dashboard")
+      if (userType === "officer") {
+        // Replace with your real officer authentication logic
+        if (email === "officer@gmail.com" && password === "1234" && department === "Water Supply") {
+          setIsHidden(true)
+          router.push("/dashboard")
+        } else {
+          setError("All officer fields are required.")
+        }
       } else {
-        setError("Invalid username or password.")
+        // Civilian login
+        if (userId && password) {
+          setIsHidden(true)
+          router.push("/dashboard")
+        } else {
+          setError("User ID and password are required.")
+        }
       }
     } catch (err) {
-      console.error("Login failed:", err)
       setError("Something went wrong. Try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
+    try {
+      if (userType === "officer") {
+        if (department && email && password) {
+          setIsHidden(true)
+          router.push("/dashboard")
+        } else {
+          setError("All officer fields are required.")
+        }
+      } else {
+        if (userId && password) {
+          setIsHidden(true)
+          router.push("/dashboard")
+        } else {
+          setError("User ID and password are required.")
+        }
+      }
+    } catch (err) {
+      setError("Registration failed. Try again.")
     } finally {
       setIsLoading(false)
     }
@@ -69,29 +120,88 @@ export default function LoginModal({ isHidden, setIsHidden }) {
             </div>
           </div>
 
+         
           {/* Header */}
           <div className="text-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-700 mb-1">Welcome</h2>
-            <p className="text-gray-600">Please enter Username & password</p>
+            <h2 className="text-2xl font-bold text-gray-700 mb-1">
+              {isLogin ? "Login" : "Register"}
+            </h2>
+            <p className="text-gray-600">
+              {isLogin ? "Please enter your details to login" : "Fill in the details to register"}
+            </p>
+          </div>
+          
+           {/* User Type Toggle */}
+          <div className="flex justify-center mb-4 gap-4">
+            <button
+              className={`px-4 py-2 rounded-lg border ${userType === "officer" ? "bg-[#4B8DCC] text-white" : "bg-white text-[#4B8DCC] border-[#4B8DCC]"}`}
+              onClick={() => { setUserType("officer"); setError(""); }}
+              type="button"
+            >
+              Officer
+            </button>
+            <button
+              className={`px-4 py-2 rounded-lg border ${userType === "civilian" ? "bg-[#4B8DCC] text-white" : "bg-white text-[#4B8DCC] border-[#4B8DCC]"}`}
+              onClick={() => { setUserType("civilian"); setError(""); }}
+              type="button"
+            >
+              Civilian
+            </button>
           </div>
 
-          {/* Login Form */}
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Username</label>
-              <div className="relative">
-                <Mail className="w-5 h-5 text-gray-700 absolute left-3 top-3" />
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white/90 focus:ring-2 focus:ring-[#004B8D] focus:border-[#004B8D] placeholder:text-gray-400"
-                  placeholder="Enter the username"
-                  required
-                />
-              </div>
-            </div>
 
+          {/* Login/Register Form */}
+          <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-6">
+            {userType === "officer" && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Department</label>
+                <div className="relative">
+                  <Briefcase className="w-5 h-5 text-gray-700 absolute left-3 top-3" />
+                  <select
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white/90 focus:ring-2 focus:ring-[#004B8D] focus:border-[#004B8D]"
+                    required
+                  >
+                    <option value="">Select department</option>
+                    {departments.map((dept) => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+            {userType === "officer" ? (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Email</label>
+                <div className="relative">
+                  <Mail className="w-5 h-5 text-gray-700 absolute left-3 top-3" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white/90 focus:ring-2 focus:ring-[#004B8D] focus:border-[#004B8D] placeholder:text-gray-400"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">User ID</label>
+                <div className="relative">
+                  <User className="w-5 h-5 text-gray-700 absolute left-3 top-3" />
+                  <input
+                    type="text"
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white/90 focus:ring-2 focus:ring-[#004B8D] focus:border-[#004B8D] placeholder:text-gray-400"
+                    placeholder="Enter your User ID"
+                    required
+                  />
+                </div>
+              </div>
+            )}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Password</label>
               <div className="relative">
@@ -117,13 +227,12 @@ export default function LoginModal({ isHidden, setIsHidden }) {
                 </button>
               </div>
             </div>
-
             <button
               type="submit"
               disabled={isLoading}
               className="w-full bg-[#4B8DCC] text-white py-2 px-4 rounded-lg hover:bg-[#4B8DCC]/90 focus:ring-4 focus:ring-[#4B8DCC]/30 disabled:opacity-50"
             >
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading ? (isLogin ? "Logging in..." : "Registering...") : (isLogin ? "Login" : "Register")}
             </button>
           </form>
 
@@ -133,6 +242,22 @@ export default function LoginModal({ isHidden, setIsHidden }) {
               <p className="text-center">{error}</p>
             </div>
           )}
+
+          {/* Toggle Login/Register */}
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              className="text-[#4B8DCC] hover:underline"
+              onClick={() => {
+                setIsLogin(!isLogin)
+                setError("")
+              }}
+            >
+              {isLogin
+                ? "Don't have an account? Register"
+                : "Already have an account? Login"}
+            </button>
+          </div>
         </div>
       </div>
     )
