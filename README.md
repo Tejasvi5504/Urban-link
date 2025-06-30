@@ -84,4 +84,4 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ---
 
-**Developed by [Your Name/Team]**
+**Developed by [Tejasvi Saini, Paras & Varun]**
