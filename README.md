@@ -4,10 +4,12 @@
 
 - 🏛️ **Dual User System**: Separate authentication for Government Officers and Civilians
 - 👥 **Officer Roles**: Four-tier role system (Admin, Department Head, Engineer, Officer)
-- 🛡️ **Role-Based Access Control**: Admin dashboard for user management and approval workflow
+- 🛡️ **Role-Based Access Control**: Complete RBAC system with admin dashboard for user management
+- ✅ **Approval Workflow**: New officer registrations require admin/dept head approval before login access
 - 🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
-- ✅ **Approval Workflow**: New officer registrations require admin/dept head approval
-- 🗃️ **MongoDB Integration**: Robust data storage with user management
+- 🏢 **Department Isolation**: Admins only manage officers within their own department
+- ⚡ **User Management**: Approve, activate, deactivate, and delete user accounts
+- 🗃️ **MongoDB Integration**: Robust data storage with comprehensive user management
 - 📱 **Responsive Design**: Mobile-friendly interface with modern UI
 - 🎨 **Modern UI**: Clean design with Tailwind CSS and Lucide React icons
 
@@ -26,11 +28,14 @@
 <div style="font-size: 14px; line-height: 1.5;">
 
 - 🏛️ **Dual User System**: Separate authentication for Government Officers and Civilians
-- � **Officer Roles**: Four-tier role system (Admin, Department Head, Engineer, Officer)
-- �🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
-- 🗃️ **MongoDB Integration**: Robust data storage with user management
+- 👥 **Officer Roles**: Four-tier role system (Admin, Department Head, Engineer, Officer)
+- 🛡️ **Role-Based Access Control**: Complete RBAC system with admin dashboard for user management
+- ✅ **Approval Workflow**: New officer registrations require admin/dept head approval before login access
+- 🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
+- 🏢 **Department Isolation**: Admins only manage officers within their own department
+- ⚡ **User Management**: Approve, activate, deactivate, and delete user accounts
+- 🗃️ **MongoDB Integration**: Robust data storage with comprehensive user management
 - 📱 **Responsive Design**: Mobile-friendly interface with modern UI
-- 🛡️ **Role-based Access**: Different dashboard views for officers and civilians
 - 🎨 **Modern UI**: Clean design with Tailwind CSS and Lucide React icons
 
 </div>
@@ -119,6 +124,50 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Usage
 
+### Role-Based Access Control (RBAC)
+
+The Urban Link platform features a comprehensive role-based access control system:
+
+#### **Officer Roles & Permissions**
+
+1. **👑 Administrator** (Highest Authority)
+   - Full department management access
+   - Can approve, activate, deactivate, and delete officers
+   - Access to Role-Based Access Control dashboard
+   - Department-scoped management
+
+2. **🏢 Department Head**
+   - Can approve, activate, and deactivate officers
+   - Access to Role-Based Access Control dashboard
+   - Cannot delete officers (admin privilege)
+   - Department-scoped management
+
+3. **⚙️ Engineer**
+   - Standard dashboard access
+   - No user management privileges
+
+4. **👮 Officer** (Basic Level)
+   - Standard dashboard access
+   - No user management privileges
+
+#### **Officer Registration & Approval Workflow**
+
+1. **New Officer Registration**:
+   - Officers register with email, password, department, and role
+   - Account is created but marked as `isApproved: false` and `isActive: false`
+   - **Cannot login until approved by admin/dept head**
+
+2. **Admin/Dept Head Approval Process**:
+   - Access "Access Control" page from dashboard sidebar (visible only to admin/dept head)
+   - View pending officer registrations in their department
+   - Approve, activate, deactivate, or delete officer accounts
+   - System tracks who approved and when
+
+3. **Login Enforcement**:
+   - Unapproved officers receive "Account pending approval" error
+   - Inactive officers receive "Account deactivated" error
+   - Only approved and active officers can access the dashboard
+
 ### For Government Officers
 
 1. Click "Login" on the homepage
@@ -126,6 +175,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 3. Choose your department from the dropdown
 4. Enter your email and password
 5. Register or login to access the officer dashboard
+6. **Note**: New registrations require admin/dept head approval before dashboard access
 
 ### For Civilians
 
@@ -138,11 +188,21 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 You can use these test credentials for quick testing or seed the database with sample data:
 
-**Officers (after seeding):**
-- Admin: `admin@waterworks.gov` / `test123` (Water Supply - Admin)
-- Dept Head: `head@planning.gov` / `test123` (Public Works - Department Head)  
-- Engineer: `engineer@transport.gov` / `test123` (Transport - Engineer)
-- Officer: `officer@health.gov` / `test123` (Health - Officer)
+**Pre-Approved Officers (Ready to Login):**
+- **Admin**: `admin@waterworks.gov` / `test123` (Water Supply - Admin)
+  - *Can access Access Control dashboard and manage Water Supply officers*
+- **Admin**: `admin@electricity.gov` / `test123` (Electricity - Admin)
+  - *Can access Access Control dashboard and manage Electricity officers*
+- **Dept Head**: `head@planning.gov` / `test123` (Public Works - Department Head)
+  - *Can access Access Control dashboard and manage Public Works officers*
+
+**Pending Approval Officers (Cannot Login Until Approved):**
+- **Engineer**: `engineer@transport.gov` / `test123` (Transport - Engineer)
+  - *Requires approval from Transport admin/dept head*
+- **Officer**: `officer@health.gov` / `test123` (Health - Officer)
+  - *Requires approval from Health admin/dept head*
+- **Engineer**: `pending@waterworks.gov` / `test123` (Water Supply - Engineer)
+  - *Can be approved by admin@waterworks.gov*
 
 **Civilians:**
 - User ID: `citizen123` / `test123`
@@ -151,6 +211,12 @@ You can use these test credentials for quick testing or seed the database with s
 **Seed Database:**
 Visit `http://localhost:3000/api/debug/seed` (POST request) to populate with sample users.
 
+**Testing RBAC System:**
+1. Login as `admin@waterworks.gov` to see Access Control menu
+2. Approve `pending@waterworks.gov` engineer
+3. Logout and login as the newly approved engineer
+4. Test different role permissions
+
 ## Project Structure
 
 ```
@@ -158,32 +224,43 @@ urban-link/
 ├── src/
 │   ├── app/
 │   │   ├── api/
+│   │   │   ├── admin/
+│   │   │   │   └── users/route.js       # RBAC user management API
 │   │   │   ├── auth/
-│   │   │   │   ├── register/route.js    # User registration
-│   │   │   │   ├── login/route.js       # User login
+│   │   │   │   ├── register/route.js    # User registration (with role-based approval)
+│   │   │   │   ├── login/route.js       # User login (approval-aware)
 │   │   │   │   └── verify/route.js      # Token verification
 │   │   │   └── debug/
-│   │   │       └── users/route.js       # User debugging (dev only)
+│   │   │       ├── users/route.js       # User debugging (dev only)
+│   │   │       └── seed/route.js        # Database seeding (dev only)
 │   │   ├── dashboard/
-│   │   │   └── page.js                  # Protected dashboard
-│   │   ├── admin/
-│   │   │   └── page.js                  # Admin panel (dev only)
+│   │   │   ├── access-control/
+│   │   │   │   └── page.tsx             # RBAC management dashboard
+│   │   │   ├── layout.tsx               # Dashboard layout
+│   │   │   └── page.tsx                 # Protected dashboard
 │   │   ├── layout.js                    # Root layout
 │   │   └── page.js                      # Landing page
 │   ├── components/
 │   │   ├── dashboard/
+│   │   │   ├── role-based-access.tsx    # RBAC management component
 │   │   │   ├── dashboard-shell.tsx      # Dashboard layout
-│   │   │   ├── sidebar.tsx              # Navigation sidebar
+│   │   │   ├── sidebar.tsx              # Navigation sidebar (role-aware)
 │   │   │   └── topbar.tsx              # Top navigation
-│   │   ├── ui/                          # Reusable UI components
+│   │   ├── ui/                          # Reusable UI components (Shadcn/ui)
+│   │   │   ├── alert-dialog.tsx         # Alert dialog for confirmations
+│   │   │   ├── table.tsx               # Data table component
+│   │   │   ├── badge.tsx               # Status badges
+│   │   │   └── ...                     # Other UI components
 │   │   ├── LoginModal.jsx               # Authentication modal
 │   │   └── ProtectedRoute.js            # Route protection
 │   ├── contexts/
-│   │   └── AuthContext.js               # Authentication context
-│   └── lib/
-│       ├── mongodb.js                   # Database connection
-│       ├── jwt.js                       # JWT utilities
-│       └── auth.js                      # Password hashing
+│   │   └── authContext.js               # Authentication context (role-aware)
+│   ├── lib/
+│   │   ├── mongodb.js                   # Database connection
+│   │   ├── jwt.js                       # JWT utilities
+│   │   ├── auth.js                      # Password hashing
+│   │   ├── roles.js                     # Role management utilities
+│   │   └── utils.js                     # General utilities
 ├── public/
 │   └── logo.png                         # Application logo
 ├── .env.local                           # Environment variables (create this)
@@ -195,9 +272,18 @@ urban-link/
 
 ### Authentication
 
-- `POST /api/auth/register` - Register new user (with role for officers)
-- `POST /api/auth/login` - User login (role-aware for officers)
-- `GET /api/auth/verify` - Verify JWT token (returns role information)
+- `POST /api/auth/register` - Register new user (with role and approval system for officers)
+- `POST /api/auth/login` - User login (approval-aware for officers)
+- `GET /api/auth/verify` - Verify JWT token (returns role and approval status)
+
+### Role-Based Access Control (Admin/Dept Head Only)
+
+- `GET /api/admin/users` - List officers in same department (with approval status)
+- `POST /api/admin/users` - Manage officer accounts:
+  - **approve**: Approve pending officer registration
+  - **activate**: Reactivate deactivated officer
+  - **deactivate**: Temporarily disable officer account
+  - **delete**: Permanently remove officer (admin only)
 
 ### Development
 
@@ -207,10 +293,13 @@ urban-link/
 ## Security Features
 
 - ✅ Password hashing with bcrypt (12 salt rounds)
-- ✅ JWT token-based authentication
+- ✅ JWT token-based authentication with role-based verification
 - ✅ Input validation and sanitization
-- ✅ Protected routes with role-based access
-- ✅ Secure error handling
+- ✅ Protected routes with comprehensive role-based access control
+- ✅ Department-scoped data access (admins only see their department)
+- ✅ Approval workflow for new officer registrations
+- ✅ Audit trail for user approvals (tracks who approved and when)
+- ✅ Secure error handling with appropriate error messages
 - ✅ Environment variable protection
 
 ## Database Schema
@@ -228,10 +317,21 @@ urban-link/
   role: String,           // For officers: "admin" | "dept_head" | "engineer" | "officer"
   createdAt: Date,
   updatedAt: Date,
-  isActive: Boolean,
+  isActive: Boolean,      // Account activation status
+  isApproved: Boolean,    // Approval status (officers only)
+  approvedBy: ObjectId,   // ID of admin/dept_head who approved
+  approvedAt: Date,       // Timestamp of approval
   lastLoginAt: Date       // Updated on login
 }
 ```
+
+#### **RBAC-Specific Fields:**
+
+- **`isApproved`**: Controls whether officer can login (default: false for new officers)
+- **`isActive`**: Controls account activation status (can be toggled by admin/dept_head)
+- **`approvedBy`**: Reference to the admin/dept_head who approved the account
+- **`approvedAt`**: Timestamp when approval was granted
+- **`role`**: Determines dashboard permissions and access levels
 
 ## Development Tools
 
