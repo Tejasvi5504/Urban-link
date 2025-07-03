@@ -1,133 +1,317 @@
-# UrbanLink
+# Urban Link - Smart City Collaboration Platform
 
-**Interdepartmental Digital Platform for Smart Urban Governance in India**
+A Next.js application that streamlines interdepartmental cooperation for efficient urban governance with JWT-based authentication.
 
-> Streamlining collaboration between municipal agencies, utilities, and citizens to deliver faster, cheaper, and better city infrastructure.
+![Urban Link Logo](public/logo.png)
 
----
+## Features
 
-## ✨ Key Features
+- 🏛️ **Dual User System**: Separate authentication for Government Officers and Civilians
+- 🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
+- 🗃️ **MongoDB Integration**: Robust data storage with user management
+- 📱 **Responsive Design**: Mobile-friendly interface with modern UI
+- 🛡️ **Role-based Access**: Different dashboard views for officers and civilians
+- 🎨 **Modern UI**: Clean design with Tailwind CSS and Lucide React icons
 
-| Module                          | Description                                                                         |
-| ------------------------------- | ----------------------------------------------------------------------------------- |
-| **Geo‑tagged Project Registry** | Central database of ongoing & upcoming projects with map visualisation.             |
-| **Shared Resource Hub**         | Inventory of machinery, experts, and documents that departments can book or borrow. |
-| **Task & Schedule Manager**     | Gantt‑style calendars, role‑based assignments, automated conflict detection.        |
-| **Overlap Detector**            | Flags projects sharing the same site; suggests unified phasing to cut costs.        |
-| **Meetings & Notes**            | One‑click calendar invites, agenda templates, action‑item tracker.                  |
-| **Training & Workshops**        | Event calendar, registration, feedback, certificate generator.                      |
-| **Discussion Forum**            | Intra‑, inter‑, and public sections with rich text, polls, and attachments.         |
-| **Real‑time Notifications**     | WebSockets push updates for deadlines, clashes, and new posts.                      |
+## Tech Stack
 
----
+- **Frontend**: Next.js 14, React, Tailwind CSS
+- **Backend**: Next.js API Routes
+- **Database**: MongoDB
+- **Authentication**: JWT (JSON Web Tokens)
+- **Password Hashing**: bcrypt
+- **Icons**: Lucide React
+- **Styling**: Tailwind CSS
 
-## 🏗️ Tech Stack
+## Prerequisites
 
-* **Frontend**: React 18, Vite, Tailwind CSS, Heroicons, Mapbox GL JS, FullCalendar, React Query
-* **Backend**: Node.js 20, Express 5, MongoDB 6 (Atlas), Mongoose, Socket.io, Passport/JWT
-* **Dev & Ops**: TypeScript, ESLint/Prettier, Vitest, Docker, GitHub Actions CI, AWS S3 (file storage), Render/Vercel (deploy)
+Before running this project, make sure you have:
 
----
+- Node.js (v18 or higher)
+- MongoDB (Community Edition)
+- Git
 
-## 🖼️ High‑Level Architecture
+## Installation & Setup
 
-```
-┌────────────┐        REST / WS        ┌──────────────┐
-│  React UI  │  ⇄  api.urbanlink.gov ⇄ │  Express API │
-└────────────┘                         │  & Socket.io │
-     ▲                                  └──────┬──────┘
-     │  Signed URLs                               │
-     ▼                                           ▼
-┌────────────┐       MongoDB Atlas        ┌────────────┐
-│  AWS  S3   │  ⇄  geo, tasks, users  ⇄  │  Mapbox GL │
-└────────────┘                            └────────────┘
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/urban-link.git
+cd urban-link
 ```
 
----
+### 2. Install Dependencies
 
-## 🚀 Getting Started
+```bash
+npm install
+```
 
-### 1. Prerequisites
+### 3. Set Up MongoDB
 
-* **Node.js ≥ 20** & **npm ≥ 10**
-* **MongoDB Atlas** account (or local Mongo)
-* **Mapbox** access token
-* **AWS S3** bucket (or Cloudinary) for uploads
+**Option A: Local MongoDB**
+```bash
+# Install MongoDB Community Edition from https://www.mongodb.com/try/download/community
 
-### 2. Environment Variables
+# Create data directory
+mkdir C:\data\db  # Windows
+# or
+sudo mkdir -p /data/db  # macOS/Linux
 
-Create `.env` at root:
+# Start MongoDB
+mongod
+```
+
+**Option B: MongoDB Atlas (Cloud)**
+1. Create account at [MongoDB Atlas](https://cloud.mongodb.com/)
+2. Create a free cluster
+3. Get your connection string
+4. Replace the MONGODB_URI in step 4
+
+### 4. Environment Configuration
+
+Create `.env.local` file in the project root:
 
 ```env
-# Server
-PORT=5000
-MONGO_URI="mongodb+srv://<user>:<pass>@cluster.mongo.net/urbanlink"
-JWT_SECRET="super‑secret‑key"
+# Database Connection
+MONGODB_URI=mongodb://localhost:27017/urbanlink
 
-# Uploads
-AWS_ACCESS_KEY_ID="..."
-AWS_SECRET_ACCESS_KEY="..."
-AWS_BUCKET_NAME="urbanlink‑uploads"
+# JWT Secret (MUST be at least 32 characters)
+JWT_SECRET=your-super-secret-jwt-key-minimum-32-characters-long-for-security
 
-# Map
-MAPBOX_TOKEN="pk.ey..."
+# Next.js Configuration
+NEXTAUTH_URL=http://localhost:3000
 ```
 
-### 3. Installation
+**Important**: 
+- Never commit `.env.local` to version control
+- Generate a strong JWT_SECRET for production
+- For MongoDB Atlas, use your cluster connection string
+
+### 5. Run the Development Server
 
 ```bash
-git clone https://github.com/Tejasvi5504/Urban-link.git
-cd urbanlink
-
-# Install root, then workspaces
-npm install
-npm run bootstrap            # uses workspaces or lerna
+npm run dev
 ```
 
-### 4. Running Locally
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Usage
+
+### For Government Officers
+
+1. Click "Login" on the homepage
+2. Select "Officer" user type
+3. Choose your department from the dropdown
+4. Enter your email and password
+5. Register or login to access the officer dashboard
+
+### For Civilians
+
+1. Click "Login" on the homepage
+2. Select "Civilian" user type
+3. Enter your User ID and password
+4. Register or login to access the civilian dashboard
+
+### Test Credentials (Development)
+
+You can use these test credentials for quick testing:
+
+**Officer:**
+- Email: `officer@test.com`
+- Password: `test123`
+- Department: Any from the dropdown
+
+**Civilian:**
+- User ID: `citizen123`
+- Password: `test123`
+
+## Project Structure
+
+```
+urban-link/
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   │   ├── register/route.js    # User registration
+│   │   │   │   ├── login/route.js       # User login
+│   │   │   │   └── verify/route.js      # Token verification
+│   │   │   └── debug/
+│   │   │       └── users/route.js       # User debugging (dev only)
+│   │   ├── dashboard/
+│   │   │   └── page.js                  # Protected dashboard
+│   │   ├── admin/
+│   │   │   └── page.js                  # Admin panel (dev only)
+│   │   ├── layout.js                    # Root layout
+│   │   └── page.js                      # Landing page
+│   ├── components/
+│   │   ├── dashboard/
+│   │   │   ├── dashboard-shell.tsx      # Dashboard layout
+│   │   │   ├── sidebar.tsx              # Navigation sidebar
+│   │   │   └── topbar.tsx              # Top navigation
+│   │   ├── ui/                          # Reusable UI components
+│   │   ├── LoginModal.jsx               # Authentication modal
+│   │   └── ProtectedRoute.js            # Route protection
+│   ├── contexts/
+│   │   └── AuthContext.js               # Authentication context
+│   └── lib/
+│       ├── mongodb.js                   # Database connection
+│       ├── jwt.js                       # JWT utilities
+│       └── auth.js                      # Password hashing
+├── public/
+│   └── logo.png                         # Application logo
+├── .env.local                           # Environment variables (create this)
+├── .gitignore                           # Git ignore rules
+└── README.md                            # This file
+```
+
+## API Endpoints
+
+### Authentication
+
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `GET /api/auth/verify` - Verify JWT token
+
+### Development
+
+- `GET /api/debug/users` - View all users (development only)
+
+## Security Features
+
+- ✅ Password hashing with bcrypt (12 salt rounds)
+- ✅ JWT token-based authentication
+- ✅ Input validation and sanitization
+- ✅ Protected routes with role-based access
+- ✅ Secure error handling
+- ✅ Environment variable protection
+
+## Database Schema
+
+### Users Collection
+
+```javascript
+{
+  _id: ObjectId,
+  userType: "officer" | "civilian",
+  email: String,          // For officers
+  userId: String,         // For civilians
+  password: String,       // Hashed with bcrypt
+  department: String,     // For officers only
+  createdAt: Date,
+  updatedAt: Date,
+  isActive: Boolean,
+  lastLoginAt: Date       // Updated on login
+}
+```
+
+## Development Tools
+
+### View Database Data
+
+**Method 1: MongoDB Compass (GUI)**
+- Install [MongoDB Compass](https://www.mongodb.com/products/compass)
+- Connect to `mongodb://localhost:27017`
+- Navigate to `urbanlink` database
+
+**Method 2: MongoDB Shell**
 ```bash
-# In one terminal
-npm run dev:server           # starts Express on :5000
-
-# In another
-npm run dev:client           # starts next server on :3000
+mongosh
+use urbanlink
+db.users.find().pretty()
 ```
 
-Frontend proxies API calls to `/api`.
+**Method 3: Admin Panel**
+- Visit `http://localhost:3000/admin` (development only)
+- View all users and statistics
 
----
+### Debug API
+- Visit `http://localhost:3000/api/debug/users` to see user data as JSON
 
-## 📂 Project Structure
+## Deployment
 
+### Environment Variables for Production
+
+```env
+MONGODB_URI=your-production-mongodb-uri
+JWT_SECRET=your-very-secure-jwt-secret-for-production
+NEXTAUTH_URL=https://yourdomain.com
 ```
-src/
-  app/
-    projects/
-      page.tsx         # Project dashboard page
-  components/
-    LoginModal.jsx     # Login/Register modal for officers and civilians
-public/
-  logo.png             # Project logo
-```
 
-## Customization
+### Deploy to Vercel
 
-- **Departments:**  
-  Edit the `departments` array in `LoginModal.jsx` to add or remove city departments.
-- **Color Scheme:**  
-  Update Tailwind CSS classes in components to match your branding.
-- **Authentication:**  
-  Integrate with your backend or Clerk for real authentication and user management.
+1. Connect your GitHub repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
+
+### Deploy to Other Platforms
+
+The application can be deployed to any platform that supports Node.js:
+- Netlify
+- Railway
+- Heroku
+- DigitalOcean App Platform
 
 ## Contributing
 
-Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Common Issues & Solutions
+
+### MongoDB Connection Issues
+
+**Error**: `MongoNetworkError: failed to connect to server`
+**Solution**: 
+- Ensure MongoDB is running (`mongod`)
+- Check connection string in `.env.local`
+- For Windows: Create `C:\data\db` directory
+
+### JWT Secret Error
+
+**Error**: `JWT_SECRET environment variable is not set`
+**Solution**: Add `JWT_SECRET` to your `.env.local` file (minimum 32 characters)
+
+### Module Not Found Errors
+
+**Error**: `Can't resolve '@/contexts/AuthContext'`
+**Solution**: 
+- Ensure all files are created as per project structure
+- Restart development server (`npm run dev`)
+
+### Port Already in Use
+
+**Error**: `Port 3000 is already in use`
+**Solution**: 
+```bash
+# Kill process using port 3000
+npx kill-port 3000
+# Or use different port
+npm run dev -- -p 3001
+```
 
 ## License
 
-[MIT](LICENSE)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Common Issues](#common-issues--solutions) section
+2. Search existing GitHub issues
+3. Create a new issue with detailed description
+
+## Acknowledgments
+
+- Next.js team for the amazing framework
+- MongoDB for robust database solutions
+- Tailwind CSS for utility-first styling
+- Lucide React for beautiful icons
 
 ---
 
-**Developed by [Your Name/Team]**
+**Built with ❤️ for Smart Cities**
