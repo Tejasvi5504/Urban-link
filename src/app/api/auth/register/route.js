@@ -6,7 +6,7 @@ export async function POST(request) {
   try {
     // Parse request body
     const body = await request.json()
-    const { userType, email, userId, password, department } = body
+    const { userType, email, userId, password, department, role } = body
 
     // Validate required fields based on user type
     const validationErrors = []
@@ -32,6 +32,9 @@ export async function POST(request) {
       }
       if (!department) {
         validationErrors.push('Department is required for officers')
+      }
+      if (!role || !['admin', 'dept_head', 'engineer', 'officer'].includes(role)) {
+        validationErrors.push('Valid role is required for officers (admin, dept_head, engineer, officer)')
       }
     } else if (userType === 'civilian') {
       if (!userId || userId.length < 3) {
@@ -91,9 +94,13 @@ export async function POST(request) {
       userId: userType === 'civilian' ? userId.toLowerCase() : null,
       password: hashedPassword,
       department: userType === 'officer' ? department : null,
+      role: userType === 'officer' ? role : null,
       createdAt: new Date(),
       updatedAt: new Date(),
-      isActive: true
+      isActive: userType === 'civilian' ? true : false, // Officers need approval
+      isApproved: userType === 'civilian' ? true : false, // Officers need approval
+      approvedBy: null,
+      approvedAt: null
     }
     
     // Insert user into database
@@ -102,13 +109,17 @@ export async function POST(request) {
     // Return success response (never include password!)
     return NextResponse.json(
       { 
-        message: 'User registered successfully',
+        message: userType === 'officer' 
+          ? 'Officer registration successful! Please wait for admin approval to login.' 
+          : 'User registered successfully',
         user: {
           id: result.insertedId.toString(),
           userType: newUser.userType,
           email: newUser.email,
           userId: newUser.userId,
-          department: newUser.department
+          department: newUser.department,
+          role: newUser.role,
+          isApproved: newUser.isApproved
         }
       },
       { status: 201 } // Created status code

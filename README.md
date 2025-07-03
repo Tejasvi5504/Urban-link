@@ -1,4 +1,17 @@
-# Urban Link - Smart City Collaboration Platform
+# Urban Li## Features
+
+<div style="font-size: 14px; line-height: 1.5;">
+
+- 🏛️ **Dual User System**: Separate authentication for Government Officers and Civilians
+- 👥 **Officer Roles**: Four-tier role system (Admin, Department Head, Engineer, Officer)
+- 🛡️ **Role-Based Access Control**: Admin dashboard for user management and approval workflow
+- 🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
+- ✅ **Approval Workflow**: New officer registrations require admin/dept head approval
+- 🗃️ **MongoDB Integration**: Robust data storage with user management
+- 📱 **Responsive Design**: Mobile-friendly interface with modern UI
+- 🎨 **Modern UI**: Clean design with Tailwind CSS and Lucide React icons
+
+</div>ty Collaboration Platform
 
 <div style="display: flex; align-items: flex-start; gap: 20px; margin-bottom: 20px;">
   <img src="public/logo.png" alt="Urban Link Logo" width="120" height="120" style="float: left; margin-right: 15px; margin-bottom: 10px;" />
@@ -13,7 +26,8 @@
 <div style="font-size: 14px; line-height: 1.5;">
 
 - 🏛️ **Dual User System**: Separate authentication for Government Officers and Civilians
-- 🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
+- � **Officer Roles**: Four-tier role system (Admin, Department Head, Engineer, Officer)
+- �🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
 - 🗃️ **MongoDB Integration**: Robust data storage with user management
 - 📱 **Responsive Design**: Mobile-friendly interface with modern UI
 - 🛡️ **Role-based Access**: Different dashboard views for officers and civilians
@@ -126,16 +140,20 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Test Credentials (Development)
 
-You can use these test credentials for quick testing:
+You can use these test credentials for quick testing or seed the database with sample data:
 
-**Officer:**
-- Email: `officer@test.com`
-- Password: `test123`
-- Department: Any from the dropdown
+**Officers (after seeding):**
+- Admin: `admin@waterworks.gov` / `test123` (Water Supply - Admin)
+- Dept Head: `head@planning.gov` / `test123` (Public Works - Department Head)  
+- Engineer: `engineer@transport.gov` / `test123` (Transport - Engineer)
+- Officer: `officer@health.gov` / `test123` (Health - Officer)
 
-**Civilian:**
-- User ID: `citizen123`
-- Password: `test123`
+**Civilians:**
+- User ID: `citizen123` / `test123`
+- User ID: `resident456` / `test123`
+
+**Seed Database:**
+Visit `http://localhost:3000/api/debug/seed` (POST request) to populate with sample users.
 
 ## Project Structure
 
@@ -181,13 +199,14 @@ urban-link/
 
 ### Authentication
 
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - User login
-- `GET /api/auth/verify` - Verify JWT token
+- `POST /api/auth/register` - Register new user (with role for officers)
+- `POST /api/auth/login` - User login (role-aware for officers)
+- `GET /api/auth/verify` - Verify JWT token (returns role information)
 
 ### Development
 
 - `GET /api/debug/users` - View all users (development only)
+- `POST /api/debug/seed` - Seed database with sample users and roles (development only)
 
 ## Security Features
 
@@ -210,6 +229,7 @@ urban-link/
   userId: String,         // For civilians
   password: String,       // Hashed with bcrypt
   department: String,     // For officers only
+  role: String,           // For officers: "admin" | "dept_head" | "engineer" | "officer"
   createdAt: Date,
   updatedAt: Date,
   isActive: Boolean,

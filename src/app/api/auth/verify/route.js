@@ -50,7 +50,8 @@ export async function GET(request) {
         userType: user.userType,
         email: user.email,
         userId: user.userId,
-        department: user.department
+        department: user.department,
+        role: user.role
       }
     })
     

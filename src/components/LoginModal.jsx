@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useAuth } from "@/contexts/AuthContext"
+import { useAuth } from "@/contexts/authContext"
 import { useRouter } from "next/navigation"
 import { Mail, Lock, Building2, Eye, EyeOff, X, Briefcase, User, AlertCircle, CheckCircle } from "lucide-react"
 
@@ -18,10 +18,18 @@ const departments = [
   "Parks & Recreation"
 ]
 
+const roles = [
+  { value: "admin", label: "Admin" },
+  { value: "dept_head", label: "Department Head" },
+  { value: "engineer", label: "Engineer" },
+  { value: "officer", label: "Officer" }
+]
+
 export default function LoginModal({ isHidden, setIsHidden }) {
   const [isLogin, setIsLogin] = useState(true)
   const [userType, setUserType] = useState("officer")
   const [department, setDepartment] = useState("")
+  const [role, setRole] = useState("")
   const [email, setEmail] = useState("")
   const [userId, setUserId] = useState("")
   const [password, setPassword] = useState("")
@@ -40,6 +48,7 @@ export default function LoginModal({ isHidden, setIsHidden }) {
 
   const resetForm = () => {
     setDepartment("")
+    setRole("")
     setEmail("")
     setUserId("")
     setPassword("")
@@ -57,7 +66,7 @@ export default function LoginModal({ isHidden, setIsHidden }) {
     const credentials = {
       userType,
       password,
-      ...(userType === "officer" ? { email, department } : { userId })
+      ...(userType === "officer" ? { email, department, role } : { userId })
     }
 
     const result = await login(credentials)
@@ -82,7 +91,7 @@ export default function LoginModal({ isHidden, setIsHidden }) {
     const userData = {
       userType,
       password,
-      ...(userType === "officer" ? { email, department } : { userId })
+      ...(userType === "officer" ? { email, department, role } : { userId })
     }
 
     const result = await register(userData)
@@ -166,23 +175,43 @@ export default function LoginModal({ isHidden, setIsHidden }) {
           {/* Form */}
           <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-4">
             {userType === "officer" && (
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Department</label>
-                <div className="relative">
-                  <Briefcase className="w-5 h-5 text-gray-700 absolute left-3 top-3" />
-                  <select
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white focus:ring-2 focus:ring-[#004B8D] focus:border-[#004B8D] transition-colors"
-                    required
-                  >
-                    <option value="">Select department</option>
-                    {departments.map((dept) => (
-                      <option key={dept} value={dept}>{dept}</option>
-                    ))}
-                  </select>
+              <>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Department</label>
+                  <div className="relative">
+                    <Briefcase className="w-5 h-5 text-gray-700 absolute left-3 top-3" />
+                    <select
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white focus:ring-2 focus:ring-[#004B8D] focus:border-[#004B8D] transition-colors"
+                      required
+                    >
+                      <option value="">Select department</option>
+                      {departments.map((dept) => (
+                        <option key={dept} value={dept}>{dept}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Role</label>
+                  <div className="relative">
+                    <User className="w-5 h-5 text-gray-700 absolute left-3 top-3" />
+                    <select
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white focus:ring-2 focus:ring-[#004B8D] focus:border-[#004B8D] transition-colors"
+                      required
+                    >
+                      <option value="">Select role</option>
+                      {roles.map((roleOption) => (
+                        <option key={roleOption.value} value={roleOption.value}>{roleOption.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </>
             )}
             
             {userType === "officer" ? (

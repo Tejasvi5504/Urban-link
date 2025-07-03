@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { BarChart3, Calendar, FileText, Home, Layers, LogOut, MessageSquare, Settings, Users } from "lucide-react"
+import { BarChart3, Calendar, FileText, Home, Layers, LogOut, MessageSquare, Settings, Users, Shield } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -13,16 +13,19 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
+import { useAuth } from "@/contexts/authContext"
+import { isDeptHeadOrHigher } from "@/lib/roles"
 import React from "react"
 
 export function DashboardSidebar() {
   const pathname = usePathname()
   const router = useRouter()
+  const { user } = useAuth()
 
   const menuItems = [
     {
       title: "Dashboard",
-      href: "/",
+      href: "/dashboard",
       icon: Home,
     },
     {
@@ -56,6 +59,16 @@ export function DashboardSidebar() {
       icon: Users,
     },
   ]
+
+  // Add role-based menu items
+  const adminMenuItems = []
+  if (user && isDeptHeadOrHigher(user)) {
+    adminMenuItems.push({
+      title: "Access Control",
+      href: "/dashboard/access-control",
+      icon: Shield,
+    })
+  }
 
   const handleLogout = () => {
     // Clear any session data if needed
@@ -103,6 +116,23 @@ export function DashboardSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
+          
+          {/* Admin/Department Head Section */}
+          {adminMenuItems.length > 0 && (
+            <>
+              <SidebarSeparator />
+              {adminMenuItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.title}>
+                    <Link href={item.href}>
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </>
+          )}
         </SidebarMenu>
       </SidebarContent>
       <SidebarSeparator />

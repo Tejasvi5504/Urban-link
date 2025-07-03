@@ -46,9 +46,25 @@ npm install
 
 5. **Open browser:** http://localhost:3000
 
+## Seed Database (Recommended)
+Run this command to populate with sample users:
+```bash
+curl -X POST http://localhost:3000/api/debug/seed
+```
+or visit: http://localhost:3000/api/debug/seed (POST)
+
 ## Test Login
-- **Officer:** email `officer@test.com`, password `test123`
-- **Civilian:** userId `citizen123`, password `test123`
+After seeding, you can login with:
+
+**Officers:**
+- `admin@waterworks.gov` / `test123` (Admin - Water Supply)
+- `head@planning.gov` / `test123` (Dept Head - Public Works)
+- `engineer@transport.gov` / `test123` (Engineer - Transport)
+- `officer@health.gov` / `test123` (Officer - Health)
+
+**Civilians:**
+- `citizen123` / `test123`
+- `resident456` / `test123`
 
 ## Need Help?
 Check the main [README.md](README.md) for detailed setup instructions.
