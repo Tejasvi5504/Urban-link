@@ -87,11 +87,7 @@ sudo mkdir -p /data/db  # macOS/Linux
 mongod
 ```
 
-**Option B: MongoDB Atlas (Cloud)**
-1. Create account at [MongoDB Atlas](https://cloud.mongodb.com/)
-2. Create a free cluster
-3. Get your connection string
-4. Replace the MONGODB_URI in step 4
+
 
 ### 4. Environment Configuration
 
