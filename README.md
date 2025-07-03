@@ -1,10 +1,16 @@
 # Urban Link - Smart City Collaboration Platform
 
-A Next.js application that streamlines interdepartmental cooperation for efficient urban governance with JWT-based authentication.
-
-![Urban Link Logo](public/logo.png)
+<div style="display: flex; align-items: flex-start; gap: 20px; margin-bottom: 20px;">
+  <img src="public/logo.png" alt="Urban Link Logo" width="120" height="120" style="float: left; margin-right: 15px; margin-bottom: 10px;" />
+  <div style="font-size: 14px; line-height: 1.6; text-align: justify;">
+    <p>A Next.js application that streamlines interdepartmental cooperation for efficient urban governance with JWT-based authentication. This innovative platform bridges the gap between government departments and citizens, creating a seamless digital ecosystem for modern urban management.</p>
+    <p>Urban Link revolutionizes how cities operate by providing secure, role-based access to various stakeholders while maintaining the highest standards of data protection and user experience. Built with cutting-edge technologies, it ensures scalability and reliability for growing urban environments.</p>
+  </div>
+</div>
 
 ## Features
+
+<div style="font-size: 14px; line-height: 1.5;">
 
 - 🏛️ **Dual User System**: Separate authentication for Government Officers and Civilians
 - 🔐 **Secure JWT Authentication**: Token-based authentication with bcrypt password hashing
@@ -13,7 +19,11 @@ A Next.js application that streamlines interdepartmental cooperation for efficie
 - 🛡️ **Role-based Access**: Different dashboard views for officers and civilians
 - 🎨 **Modern UI**: Clean design with Tailwind CSS and Lucide React icons
 
+</div>
+
 ## Tech Stack
+
+<div style="font-size: 14px; line-height: 1.5;">
 
 - **Frontend**: Next.js 14, React, Tailwind CSS
 - **Backend**: Next.js API Routes
@@ -22,6 +32,8 @@ A Next.js application that streamlines interdepartmental cooperation for efficie
 - **Password Hashing**: bcrypt
 - **Icons**: Lucide React
 - **Styling**: Tailwind CSS
+
+</div>
 
 ## Prerequisites
 
