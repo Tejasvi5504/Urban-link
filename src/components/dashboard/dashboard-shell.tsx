@@ -17,8 +17,8 @@ export function DashboardShell({ children }: DashboardShellProps) {
         <div className="flex flex-1">
           <DashboardSidebar />
           <SidebarInset>
-            <main className="flex-1 overflow-y-auto p-6">
-              <div className="mx-auto max-w-7xl space-y-6">{children}</div>
+            <main className="flex-1 overflow-y-auto p-0 bg-white">
+              <div className="w-full space-y-6">{children}</div>
             </main>
           </SidebarInset>
         </div>
