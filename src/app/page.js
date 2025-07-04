@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { LoginModal } from "@/components/LoginModal"
+import { AuthButtons } from "@/components/auth-buttons"
 import { useState } from "react"
 import {
   Building2,
@@ -31,7 +31,6 @@ import TaskList from './TaskList'
 import RecentActivities from './RecentActivities'
 
 export default function LandingPage() {
-  const [isLoginModalHidden, setIsLoginModalHidden] = useState(true)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -47,8 +46,8 @@ export default function LandingPage() {
               className="h-28 w-28"
               priority
             />
-            <span className="text-4xl font-bold text-[#1A1A1A]">UrbanLink</span>
-          </div>
+            <span className="text-4xl font-extrabold bg-gradient-to-r from-[#004B8D] to-[#FFB74D] bg-clip-text text-transparent hover:from-[#FFB74D] hover:to-[#004B8D] transition-all duration-300 font-jakarta tracking-tight uppercase italic drop-shadow-sm">UrbanLink</span>
+            </div>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
@@ -61,13 +60,8 @@ export default function LandingPage() {
           </nav>
           
           {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center gap-4">
-            <Button asChild variant="outline" className="border-[#004B8D] text-[#004B8D] hover:bg-[#004B8D] hover:text-white" onClick={() => setIsLoginModalHidden(false)}>
-              <Link href="#">Login</Link>
-            </Button>
-            <Button asChild className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white">
-              <Link href="/register">Register</Link>
-            </Button>
+          <div className="hidden md:block">
+            <AuthButtons />
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,25 +95,8 @@ export default function LandingPage() {
                 How It Works
               </Link>
             </nav>
-            <div className="flex flex-col gap-4 pt-4 border-t border-[#E5E7EB]">
-              <Button 
-                asChild 
-                variant="outline" 
-                className="w-full border-[#004B8D] text-[#004B8D] hover:bg-[#004B8D] hover:text-white"
-                onClick={() => {
-                  setIsLoginModalHidden(false);
-                  setMobileMenuOpen(false);
-                }}
-              >
-                <Link href="#">Login</Link>
-              </Button>
-              <Button 
-                asChild 
-                className="w-full bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Link href="/register">Register</Link>
-              </Button>
+            <div className="pt-4">
+              <AuthButtons />
             </div>
           </div>
         </div>
@@ -141,20 +118,19 @@ export default function LandingPage() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button 
                     size="lg" 
-                    className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
+                    className="bg-[#FFA500]/70 hover:bg-[#FFA500]/60 text-white"
                     onClick={() => {
                       window.scrollTo({ top: 0, behavior: 'smooth' });
-                      setTimeout(() => setIsLoginModalHidden(false), 500);
                     }}
                   >
                     Get Started
                   </Button>
-                  <Button size="lg" variant="outline" asChild className="border-[#004B8D] text-[#004B8D] hover:bg-[#004B8D] hover:text-white">
+                  <Button size="lg" variant="outline" asChild className="border-[#004B8D]/70 text-[#004B8D]/70 hover:bg-[#004B8D]/10 hover:text-[#004B8D]/70">
                     <Link href="#features">Learn More</Link>
                   </Button>
                 </div>
               </div>
-              <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-xl">
+              <div className="relative h-[300px] md:h-[450px] rounded-lg overflow-hidden shadow-xl">
                 <Swiper
                   modules={[Autoplay, Navigation, Pagination]}
                   spaceBetween={0}
@@ -177,7 +153,7 @@ export default function LandingPage() {
                   <SwiperSlide>
                     <div className="relative h-full bg-white">
                       <Image
-                        src="/images/Carosel1.jpg"
+                        src="/images/photo-1562630426-5942d5363820.avif"
                         alt="Data Analytics Dashboard"
                         fill
                         className="object-cover"
@@ -188,7 +164,7 @@ export default function LandingPage() {
                   <SwiperSlide>
                     <div className="relative h-full">
                       <Image
-                        src="/images/Carosel.jpg"
+                        src="/images/photo-1495725274072-fd5d0b961a9f.avif"
                         alt="Smart City Dashboard"
                         fill
                         className="object-cover"
@@ -198,7 +174,7 @@ export default function LandingPage() {
                   <SwiperSlide>
                     <div className="relative h-full">
                       <Image
-                        src="/images/Carosel3.jpg"
+                        src="/images/photo-1541888946425-d81bb19240f5.avif"
                         alt="Data Analytics Dashboard"
                         fill
                         className="object-cover"
@@ -347,7 +323,6 @@ export default function LandingPage() {
                   className="bg-[#FFA500] hover:bg-[#FFA500]/90 text-white"
                   onClick={() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                    setTimeout(() => setIsLoginModalHidden(false), 500);
                   }}
                 >
                   Get Started
@@ -461,7 +436,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-      <LoginModal isHidden={isLoginModalHidden} setIsHidden={setIsLoginModalHidden} />
     </div>
   )
 }

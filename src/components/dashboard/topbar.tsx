@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Bell, ChevronDown, Search } from "lucide-react"
+import { Bell, ChevronDown, Search, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -14,8 +14,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { useRouter } from "next/navigation"
 
 export function Topbar() {
+  const router = useRouter()
+  
+  const handleSignOut = () => {
+    router.push("/")
+  }
+  
+  // Mock user data since we removed authentication
+  const firstName = "John"
+  const lastName = "Doe"
+  const fullName = `${firstName} ${lastName}`.trim()
+  const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
+  
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center border-b bg-background px-4 md:px-6">
       <div className="flex items-center gap-2 md:gap-4">
@@ -41,8 +54,8 @@ export function Topbar() {
               <path d="M17 13v5" />
             </svg>
           </div>
-          <span className="hidden font-bold md:inline-block">UrbanLink</span>
-        </Link>
+          <span className="text-4xl font-extrabold bg-gradient-to-r from-[#004B8D] to-[#FFB74D] bg-clip-text text-transparent hover:from-[#FFB74D] hover:to-[#004B8D] transition-all duration-300 font-jakarta tracking-tight uppercase italic drop-shadow-sm">UrbanLink</span>
+          </Link>
       </div>
       <div className="ml-auto flex items-center gap-4">
         <form className="relative hidden md:block">
@@ -58,11 +71,10 @@ export function Topbar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="/placeholder.svg?height=32&width=32" alt="Officer Sharma" />
-                <AvatarFallback>OS</AvatarFallback>
+                <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div className="hidden flex-col items-start text-sm md:flex">
-                <span className="font-medium">Officer Sharma</span>
+                <span className="font-medium">{fullName}</span>
                 <span className="text-xs text-muted-foreground">Urban Planning Officer</span>
               </div>
               <ChevronDown className="h-4 w-4 text-muted-foreground" />
@@ -75,7 +87,10 @@ export function Topbar() {
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Help & Support</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign out
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
