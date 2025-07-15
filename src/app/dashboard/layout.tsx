@@ -6,13 +6,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // No authentication check needed anymore
-  
   return (
-    <div className="min-h-screen bg-background">
-      <ThemeProvider defaultTheme="system" attribute="class">
-        {children}
-      </ThemeProvider>
-    </div>
+    <>
+      {children}
+    </>
   );
 }

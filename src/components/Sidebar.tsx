@@ -10,10 +10,13 @@ import {
   MessageSquare,
   Moon,
   Settings, Sun,
+  Shield,
   Users
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/authContext";
+import { isDeptHeadOrHigher } from "@/lib/roles";
 
 export default function Sidebar({ fullName = "User", userRole = "Urban Officer", sidebarCollapsed, setSidebarCollapsed, sidebarOpen, setSidebarOpen }: {
   fullName?: string,
@@ -24,6 +27,12 @@ export default function Sidebar({ fullName = "User", userRole = "Urban Officer",
   setSidebarOpen: (v: boolean) => void,
 }) {
   const router = useRouter();
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
+  };
 
   return (
     <aside
@@ -71,9 +80,12 @@ export default function Sidebar({ fullName = "User", userRole = "Urban Officer",
           <div className="mb-2 text-xs uppercase tracking-widest text-blue-200 font-semibold pl-2">
             Account
           </div>
+          {user && isDeptHeadOrHigher(user) && (
+            <SidebarLink href="/dashboard/access-control" icon={<Shield />} label="Access Control" collapsed={sidebarCollapsed} />
+          )}
           <SidebarLink href="/settings" icon={<Settings />} label="Settings" collapsed={sidebarCollapsed} />
           <button 
-            onClick={() => { window.location.href = "/"; }}
+            onClick={handleLogout}
             className="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-800 transition-colors font-medium w-full text-left"
           >
             <LogOut className="w-6 h-6" />

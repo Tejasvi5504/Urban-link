@@ -455,7 +455,15 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-white mt-12 pt-8 text-center text-white/80">
-            <p>&copy; {new Date().getFullYear()} UrbanLink. All rights reserved.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p>&copy; {new Date().getFullYear()} UrbanLink. All rights reserved.</p>
+              <Link 
+                href="/admin/setup" 
+                className="text-xs text-white/60 hover:text-white/80 transition-colors"
+              >
+                Admin Setup
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

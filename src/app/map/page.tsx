@@ -19,7 +19,46 @@ import {
   BadgeCheck,
   Search, // <-- Add this line
 } from "lucide-react";
-import { projectsData } from "@/app/projects/page"; // Or your shared data file
+
+// Mock projects data - replace with actual data source
+const projectsData = [
+  {
+    id: "1",
+    name: "Smart Water Management System",
+    title: "Smart Water Management System",
+    city: "Mumbai",
+    location: "Mumbai, Maharashtra",
+    coordinates: [19.0760, 72.8777],
+    lat: 19.0760,
+    lng: 72.8777,
+    status: "In Progress",
+    department: "Water Supply"
+  },
+  {
+    id: "2", 
+    name: "Digital Waste Collection",
+    title: "Digital Waste Collection",
+    city: "Pune",
+    location: "Pune, Maharashtra", 
+    coordinates: [18.5204, 73.8567],
+    lat: 18.5204,
+    lng: 73.8567,
+    status: "Completed",
+    department: "Sanitation"
+  },
+  {
+    id: "3",
+    name: "Traffic Flow Optimization", 
+    title: "Traffic Flow Optimization",
+    city: "Bangalore",
+    location: "Bangalore, Karnataka",
+    coordinates: [12.9716, 77.5946],
+    lat: 12.9716,
+    lng: 77.5946,
+    status: "Planning",
+    department: "Transportation"
+  }
+];
 
 const ProjectMap = dynamic(() => import("@/components/Map/ProjectMap"), { ssr: false });
 
@@ -142,8 +181,6 @@ export default function MapPage() {
           <div className="h-[800px] w-full">
             <ProjectMap
               projects={filteredProjects}
-              onMarkerClick={setSelected}
-              selectedProject={selected}
             />
           </div>
         </div>

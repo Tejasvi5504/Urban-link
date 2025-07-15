@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from "react-leaflet"
+import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl, useMapEvents } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
 import "./leaflet-map.css"
@@ -10,6 +10,14 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+// MapEventHandler component to handle map clicks
+const MapEventHandler = ({ onClick }: { onClick: (e: L.LeafletMouseEvent) => void }) => {
+  useMapEvents({
+    click: onClick,
+  })
+  return null
+}
 
 // Custom SVG icons for different project statuses
 const createCustomIcon = (status: string) => {
@@ -51,6 +59,8 @@ interface Project {
 
 interface MapProps {
   projects?: Project[]
+  searchLocation?: { lat: number; lng: number } | null
+  onLocationSearch?: (query: string) => void
 }
 
 // Component to handle map view changes
@@ -62,10 +72,10 @@ function MapController({ center }: { center: [number, number] }) {
   return null
 }
 
-export function LeafletMapComponent({ projects = [] }: MapProps) {
+export function LeafletMapComponent({ projects = [], searchLocation, onLocationSearch }: MapProps) {
   const [mapView, setMapView] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null)
+  const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(searchLocation ? [searchLocation.lat, searchLocation.lng] : null)
   const [newProject, setNewProject] = useState<Partial<Project>>({
     name: "",
     description: "",
@@ -76,7 +86,15 @@ export function LeafletMapComponent({ projects = [] }: MapProps) {
   const [isCreatingProject, setIsCreatingProject] = useState(false)
   const [activePopup, setActivePopup] = useState<string | null>(null)
 
-  const defaultCenter: [number, number] = [51.5074, -0.1278]
+  // Default center set to India
+  const defaultCenter: [number, number] = [20.5937, 78.9629]
+
+  // Update map center when search location changes
+  useEffect(() => {
+    if (searchLocation) {
+      setSelectedLocation([searchLocation.lat, searchLocation.lng])
+    }
+  }, [searchLocation])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -141,131 +159,95 @@ export function LeafletMapComponent({ projects = [] }: MapProps) {
   }, [])
 
   return (
-    <Card className="mt-6">
-      <CardHeader className="flex flex-row items-center">
-        <div>
-          <CardTitle>Project Map</CardTitle>
-        </div>
-        <div className="ml-auto flex items-center gap-2">
-          <Button
-            onClick={startCreatingProject}
-            className={isCreatingProject ? "bg-blue-600" : ""}
+    <div className="h-full w-full">
+      <MapContainer
+        center={selectedLocation || defaultCenter}
+        zoom={selectedLocation ? 13 : 5}
+        style={{ height: "100%", width: "100%" }}
+        zoomControl={true}
+      >
+        <MapEventHandler onClick={handleMapClick} />
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+        />
+        <MapController center={selectedLocation || defaultCenter} />
+        
+        {filteredProjects.map((project) => (
+          <Marker
+            key={project.id}
+            position={[project.location.lat, project.location.lng]}
+            icon={createCustomIcon(project.status)}
+            eventHandlers={{
+              click: () => handlePopupOpen(project.id)
+            }}
           >
-            {isCreatingProject ? "Click on map to place project" : "Create Project"}
-          </Button>
-          <Input
-            type="text"
-            placeholder="Search location..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-[200px]"
-          />
-          <Select value={mapView} onValueChange={setMapView}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Projects</SelectItem>
-              <SelectItem value="in-progress">In Progress</SelectItem>
-              <SelectItem value="planning">Planning</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[500px] w-full">
-          <MapContainer
-            center={defaultCenter}
-            zoom={13}
-            style={{ height: "100%", width: "100%" }}
-            onClick={handleMapClick}
-            zoomControl={false}
-          >
-            <ZoomControl position="bottomright" />
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-            />
-            <MapController center={selectedLocation || defaultCenter} />
-            
-            {filteredProjects.map((project) => (
-              <Marker
-                key={project.id}
-                position={[project.location.lat, project.location.lng]}
-                icon={createCustomIcon(project.status)}
-                eventHandlers={{
-                  click: () => handlePopupOpen(project.id)
-                }}
-              >
-                <Popup
-                  eventHandlers={{
-                    add: () => handlePopupOpen(project.id),
-                    remove: handlePopupClose
-                  }}
-                >
-                  <div className="p-2">
-                    <h3 className="font-bold">{project.name}</h3>
-                    <Badge className={getStatusColor(project.status)}>
-                      {project.status}
-                    </Badge>
-                    <p className="mt-2">{project.description}</p>
-                    <p className="mt-1 text-sm text-gray-600">
-                      Department: {project.department}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Timeline: {project.timeline}
-                    </p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
+            <Popup
+              eventHandlers={{
+                add: () => handlePopupOpen(project.id),
+                remove: handlePopupClose
+              }}
+            >
+              <div className="p-2">
+                <h3 className="font-bold">{project.name}</h3>
+                <Badge className={getStatusColor(project.status)}>
+                  {project.status}
+                </Badge>
+                <p className="mt-2">{project.description}</p>
+                <p className="mt-1 text-sm text-gray-600">
+                  Department: {project.department}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Timeline: {project.timeline}
+                </p>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
 
-            {selectedLocation && isCreatingProject && (
-              <Marker 
-                position={selectedLocation}
-                icon={createCustomIcon("Planning")}
-              >
-                <Popup
-                  eventHandlers={{
-                    add: () => handlePopupOpen("new"),
-                    remove: handlePopupClose
-                  }}
-                >
-                  <div className="p-2">
-                    <h3 className="font-bold mb-2">Add New Project</h3>
-                    <div className="space-y-2">
-                      <Input
-                        placeholder="Project Name"
-                        value={newProject.name}
-                        onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-                      />
-                      <Input
-                        placeholder="Department"
-                        value={newProject.department}
-                        onChange={(e) => setNewProject({ ...newProject, department: e.target.value })}
-                      />
-                      <Input
-                        placeholder="Timeline"
-                        value={newProject.timeline}
-                        onChange={(e) => setNewProject({ ...newProject, timeline: e.target.value })}
-                      />
-                      <Input
-                        placeholder="Description"
-                        value={newProject.description}
-                        onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                      />
-                      <Button onClick={handleAddProject} className="w-full">
-                        Add Project
-                      </Button>
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
-            )}
-          </MapContainer>
-        </div>
-      </CardContent>
-    </Card>
+        {selectedLocation && isCreatingProject && (
+          <Marker 
+            position={selectedLocation}
+            icon={createCustomIcon("Planning")}
+          >
+            <Popup
+              eventHandlers={{
+                add: () => handlePopupOpen("new"),
+                remove: handlePopupClose
+              }}
+            >
+              <div className="p-2">
+                <h3 className="font-bold mb-2">Add New Project</h3>
+                <div className="space-y-2">
+                  <Input
+                    placeholder="Project Name"
+                    value={newProject.name}
+                    onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+                  />
+                  <Input
+                    placeholder="Department"
+                    value={newProject.department}
+                    onChange={(e) => setNewProject({ ...newProject, department: e.target.value })}
+                  />
+                  <Input
+                    placeholder="Timeline"
+                    value={newProject.timeline}
+                    onChange={(e) => setNewProject({ ...newProject, timeline: e.target.value })}
+                  />
+                  <Input
+                    placeholder="Description"
+                    value={newProject.description}
+                    onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                  />
+                  <Button onClick={handleAddProject} className="w-full">
+                    Add Project
+                  </Button>
+                </div>
+              </div>
+            </Popup>
+          </Marker>
+        )}
+      </MapContainer>
+    </div>
   )
 } 

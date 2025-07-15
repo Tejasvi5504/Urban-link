@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { BarChart3, Calendar, FileText, Home, Layers, LogOut, MessageSquare, Settings, Users, Shield } from "lucide-react"
+import { BarChart3, Calendar, FileText, Home, Layers, LogOut, MessageSquare, Settings, Users, Shield, MapPin } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -12,6 +12,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/contexts/authContext"
 import { isDeptHeadOrHigher } from "@/lib/roles"
@@ -20,9 +23,9 @@ import React from "react"
 export function DashboardSidebar() {
   const pathname = usePathname()
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
-  const menuItems = [
+  const mainMenuItems = [
     {
       title: "Dashboard",
       href: "/dashboard",
@@ -34,6 +37,11 @@ export function DashboardSidebar() {
       icon: Layers,
     },
     {
+      title: "Departments", 
+      href: "/departments",
+      icon: Users,
+    },
+    {
       title: "Resources",
       href: "/resources",
       icon: FileText,
@@ -43,6 +51,9 @@ export function DashboardSidebar() {
       href: "/tasks",
       icon: BarChart3,
     },
+  ]
+
+  const collaborationMenuItems = [
     {
       title: "Meetings",
       href: "/meetings",
@@ -54,9 +65,9 @@ export function DashboardSidebar() {
       icon: MessageSquare,
     },
     {
-      title: "Training",
-      href: "/training",
-      icon: Users,
+      title: "Map",
+      href: "/map",
+      icon: MapPin,
     },
   ]
 
@@ -70,9 +81,9 @@ export function DashboardSidebar() {
     })
   }
 
-  const handleLogout = () => {
-    // Clear any session data if needed
-    // Redirect to landing page
+  const handleLogout = async () => {
+    const { logout } = useAuth()
+    await logout()
     router.push("/")
   }
 
@@ -105,23 +116,11 @@ export function DashboardSidebar() {
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>
-        <SidebarMenu>
-          {menuItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.title}>
-                <Link href={item.href}>
-                  <item.icon className="h-5 w-5" />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-          
-          {/* Admin/Department Head Section */}
-          {adminMenuItems.length > 0 && (
-            <>
-              <SidebarSeparator />
-              {adminMenuItems.map((item) => (
+        <SidebarGroup>
+          <SidebarGroupLabel>MAIN</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.title}>
                     <Link href={item.href}>
@@ -131,9 +130,48 @@ export function DashboardSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-            </>
-          )}
-        </SidebarMenu>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>COLLABORATION</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {collaborationMenuItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.title}>
+                    <Link href={item.href}>
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        
+        {/* Admin/Department Head Section */}
+        {adminMenuItems.length > 0 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>ACCOUNT</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {adminMenuItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.title}>
+                      <Link href={item.href}>
+                        <item.icon className="h-5 w-5" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
       <SidebarSeparator />
       <SidebarFooter>

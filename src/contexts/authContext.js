@@ -24,10 +24,22 @@ export function AuthProvider({ children }) {
       setIsLoading(true)
       
       const token = localStorage.getItem('authToken')
+      const userData = localStorage.getItem('userData')
       
       if (!token) {
         setIsLoading(false)
         return
+      }
+
+      // First, try to use cached user data if available
+      if (userData) {
+        try {
+          const parsedUserData = JSON.parse(userData)
+          setUser(parsedUserData)
+          setIsAuthenticated(true)
+        } catch (error) {
+          console.error('Error parsing cached user data:', error)
+        }
       }
 
       // Verify token with server
@@ -43,6 +55,8 @@ export function AuthProvider({ children }) {
         const data = await response.json()
         setUser(data.user)
         setIsAuthenticated(true)
+        // Update cached user data
+        localStorage.setItem('userData', JSON.stringify(data.user))
       } else {
         // Token is invalid, clear it
         localStorage.removeItem('authToken')
@@ -52,11 +66,28 @@ export function AuthProvider({ children }) {
       }
     } catch (error) {
       console.error('Auth status check failed:', error)
-      // Clear potentially corrupted data
-      localStorage.removeItem('authToken')
-      localStorage.removeItem('userData')
-      setUser(null)
-      setIsAuthenticated(false)
+      // Don't clear data on network errors, keep using cached data if available
+      const userData = localStorage.getItem('userData')
+      if (userData) {
+        try {
+          const parsedUserData = JSON.parse(userData)
+          setUser(parsedUserData)
+          setIsAuthenticated(true)
+        } catch (parseError) {
+          console.error('Error parsing cached user data:', parseError)
+          // Only clear on parse errors
+          localStorage.removeItem('authToken')
+          localStorage.removeItem('userData')
+          setUser(null)
+          setIsAuthenticated(false)
+        }
+      } else {
+        // Clear data only if no cached data is available
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('userData')
+        setUser(null)
+        setIsAuthenticated(false)
+      }
     } finally {
       setIsLoading(false)
     }

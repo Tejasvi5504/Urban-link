@@ -127,7 +127,7 @@ const statusCounts = {
 }
 
 export default function ProjectsPage() {
-  const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [selectedProject, setSelectedProject] = useState(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
 
@@ -140,14 +140,6 @@ export default function ProjectsPage() {
       default: return "bg-gray-100 text-gray-800"
     }
   }
-
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         project.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         project.id.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesStatus = statusFilter === "all" || project.status.toLowerCase() === statusFilter.toLowerCase()
-    return matchesSearch && matchesStatus
-  })
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -217,7 +209,6 @@ export default function ProjectsPage() {
             key={project.id}
             project={project}
             onClick={() => setSelectedProject(project)}
-            getStatusColor={getStatusColor}
           />
         ))}
       </div>
@@ -227,14 +218,13 @@ export default function ProjectsPage() {
         <ProjectModal
           project={selectedProject}
           onClose={() => setSelectedProject(null)}
-          getStatusColor={getStatusColor}
         />
       )}
     </div>
   )
 }
 
-function ProjectCard({ project, onClick, getStatusColor }: { project: any, onClick: () => void, getStatusColor: (status: string) => string }) {
+function ProjectCard({ project, onClick }: { project: any, onClick: () => void }) {
   const getLeftBorderColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "ongoing": return "border-l-blue-400"
@@ -284,7 +274,17 @@ function ProjectCard({ project, onClick, getStatusColor }: { project: any, onCli
   )
 }
 
-function ProjectModal({ project, onClose, getStatusColor }: { project: any, onClose: () => void, getStatusColor: (status: string) => string }) {
+function ProjectModal({ project, onClose }: { project: any, onClose: () => void }) {
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "ongoing": return "bg-blue-100 text-blue-800"
+      case "completed": return "bg-green-100 text-green-800"
+      case "pending": return "bg-yellow-100 text-yellow-800"
+      case "planned": return "bg-gray-100 text-gray-800"
+      default: return "bg-gray-100 text-gray-800"
+    }
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -296,7 +296,9 @@ function ProjectModal({ project, onClose, getStatusColor }: { project: any, onCl
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">{project.name}</h2>
-              <p className="text-gray-600 text-sm">{project.description}</p>
+              <p className="text-gray-600 text-sm">
+                {project.status === "Ongoing" ? "Extending the metro line to connect suburban areas and reduce traffic congestion. Includes new stations, tracks, and smart ticketing." : project.description}
+              </p>
             </div>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">

@@ -1,6 +1,5 @@
 "use client"
 
-import { DashboardShell } from "@/components/dashboard/dashboard-shell"
 import { RoleBasedAccessControl } from "@/components/dashboard/role-based-access"
 import { useAuth } from "@/contexts/authContext"
 import { isDeptHeadOrHigher } from "@/lib/roles"
@@ -21,14 +20,14 @@ export default function AccessControlPage() {
   // Show loading or redirect if not authorized
   if (isLoading) {
     return (
-      <DashboardShell>
+      <div className="flex-1 p-6">
         <div className="flex items-center justify-center py-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
             <p className="mt-2 text-sm text-gray-500">Loading...</p>
           </div>
         </div>
-      </DashboardShell>
+      </div>
     )
   }
 
@@ -37,7 +36,7 @@ export default function AccessControlPage() {
   }
 
   return (
-    <DashboardShell>
+    <div className="flex-1 p-6">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Access Control</h1>
@@ -48,6 +47,6 @@ export default function AccessControlPage() {
         
         <RoleBasedAccessControl />
       </div>
-    </DashboardShell>
+    </div>
   )
 }
